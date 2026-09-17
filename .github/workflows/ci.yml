@@ -1,0 +1,44 @@
+name: CI Pipeline
+
+# Triggers: When should this run?
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Jobs: What virtual machine to run on?
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+
+    # Steps: The sequential tasks to execute
+    steps:
+      # Step A: Clone the repo onto the GitHub runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step B: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Step C: Install linters & tools
+      - name: Install dependencies
+        run: |
+          pip install ruff dbt-snowflake
+
+      # Step D: Run Python linting
+      - name: Lint Python with Ruff
+        run: |
+          ruff check .
+
+      # Step E: Validate dbt models
+      - name: Validate dbt project
+        env:
+          SNOWFLAKE_ACCOUNT: "dummy"
+          SNOWFLAKE_USER: "dummy"
+          SNOWFLAKE_PASSWORD: "dummy"
+        run: |
+          dbt parse --project-dir dbt --profiles-dir dbt

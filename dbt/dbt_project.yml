@@ -1,0 +1,14 @@
+name: 'triplens'
+version: '1.0.0'
+profile: 'triplens'  # must match the profile name in profiles.yml
+
+model-paths: ["models"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+
+models:
+  triplens:
+    staging:
+      +materialized: view      # Staging models are usually lightweight views
+    marts:
+      +materialized: table     # Analytics marts are persisted as physical tables

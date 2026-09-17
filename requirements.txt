@@ -1,0 +1,4 @@
+requests
+minio
+snowflake-connector-python
+python-dotenv

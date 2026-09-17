@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: dim_countries
+    description: "Core country dimension table"
+    columns:
+      - name: country_name
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania', 'Antarctic']
+      - name: alpha_3_code
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_languages
+    description: "Country to language mapping"
+    columns:
+      - name: language_name
+        tests:
+          - not_null
+      - name: alpha_3_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_countries')
+                field: alpha_3_code
+
+  - name: dim_currencies
+    description: "Country to currency mapping"
+    columns:
+      - name: currency_name
+        tests:
+          - not_null
+      - name: alpha_3_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_countries')
+                field: alpha_3_code
+
+  - name: bridge_borders
+    description: "Country to border mapping"
+    columns:
+      - name: border_country_code
+        tests:
+          - not_null
+      - name: alpha_3_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_countries')
+                field: alpha_3_code
+
+  - name: dim_timezones
+    description: "Country to timezone mapping"
+    columns:
+      - name: timezone
+        tests:
+          - not_null
+      - name: alpha_3_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_countries')
+                field: alpha_3_code

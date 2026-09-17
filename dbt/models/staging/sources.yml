@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('SNOWFLAKE_DATABASE', 'TRIPLENS') }}"
+    schema: RAW
+    tables:
+      - name: countries_raw
+        description: "Raw country JSON records loaded into Snowflake from MinIO"
